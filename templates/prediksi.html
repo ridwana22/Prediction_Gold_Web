@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediksi Harga Emas AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>body { background-color: #f8f9fa; }</style>
+</head>
+<body>
+    
+    <nav class="navbar navbar-dark bg-primary mb-5 shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/dashboard"><i class="fas fa-chart-line me-2"></i>Gold System</a>
+            <a href="/dashboard" class="btn btn-light btn-sm fw-bold text-primary"><i class="fas fa-arrow-left me-1"></i> Kembali</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                
+                <div class="card shadow border-0 mb-4">
+                    <div class="card-header bg-white py-3 fw-bold border-bottom">
+                        <i class="fas fa-calculator text-warning me-2"></i> Input Parameter Harian
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="POST" action="/prediksi_form">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">OPEN PRICE (USD)</label>
+                                <input type="number" step="0.01" name="open" class="form-control" required placeholder="0.00">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label small fw-bold text-success">HIGH PRICE</label>
+                                    <input type="number" step="0.01" name="high" class="form-control" required placeholder="0.00">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label small fw-bold text-danger">LOW PRICE</label>
+                                    <input type="number" step="0.01" name="low" class="form-control" required placeholder="0.00">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold shadow-sm">
+                                <i class="fas fa-microchip me-2"></i> Hitung Prediksi (AI)
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                {% if hasil %}
+                <div class="card shadow-lg border-0 bg-success text-white text-center overflow-hidden">
+                    <div class="card-body py-5 position-relative">
+                        <i class="fas fa-chart-line fa-5x position-absolute" style="opacity: 0.1; right: -20px; bottom: -20px;"></i>
+                        <h6 class="text-white-50 text-uppercase ls-1">Perkiraan Harga Penutupan</h6>
+                        <h1 class="display-3 fw-bold my-3">{{ hasil }}</h1>
+                        <span class="badge bg-white text-success px-3 py-2 rounded-pill">Model Confidence: High</span>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if error %}
+                <div class="alert alert-danger shadow-sm mt-3 border-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i> <strong>Error:</strong> {{ error }}
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

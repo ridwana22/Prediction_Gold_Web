@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Analis Program</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .navbar { background: linear-gradient(to right, #0d6efd, #0043a8); }
+        .card { border-radius: 12px; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-2px); }
+        .table-custom thead { background-color: #212529; color: white; }
+    </style>
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-chart-line me-2 text-warning"></i>Gold Analyst System
+            </a>
+            <div class="d-flex align-items-center">
+                <div class="text-white me-3 text-end d-none d-md-block">
+                    <small class="d-block text-white-50">Selamat Datang,</small>
+                    <span class="fw-bold">{{ session.username }}</span>
+                </div>
+                <a href="/logout" class="btn btn-light text-primary btn-sm fw-bold px-3 shadow-sm">
+                    <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4 pb-5">
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="fas fa-info-circle me-2"></i> {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="card bg-dark text-white shadow mb-4 border-0" style="background: url('https://source.unsplash.com/random/1200x300/?gold,finance') no-repeat center; background-size: cover;">
+            <div class="card-body p-4 p-md-5" style="background: rgba(0,0,0,0.6); border-radius: 12px;">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="fw-bold text-warning">Prediksi Harga Emas Realtime</h2>
+                        <p class="mb-0">Gunakan kecerdasan buatan (AI) untuk memprediksi pergerakan pasar selanjutnya.</p>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <a href="/prediksi_form" class="btn btn-warning btn-lg fw-bold shadow">
+                            <i class="fas fa-robot me-2"></i> Mulai Prediksi AI
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            
+            <div class="col-lg-4">
+                <div class="card shadow-sm h-100 border-0">
+                    <div class="card-header bg-white py-3 fw-bold border-bottom">
+                        <i class="fas fa-plus-circle text-primary me-2"></i> Input Data Harian
+                    </div>
+                    <div class="card-body">
+                        <form action="/tambah_data" method="post">
+                            <div class="mb-3">
+                                <label class="form-label text-muted small">TANGGAL TRANSAKSI</label>
+                                <input type="date" name="tanggal" class="form-control" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label text-muted small">HARGA PENUTUPAN (PRICE)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">$</span>
+                                    <input type="number" step="0.01" name="harga" class="form-control" placeholder="0.00" required>
+                                </div>
+                                <div class="form-text small">*Kolom Open/High/Low akan otomatis disamakan untuk input manual ini.</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 py-2">
+                                <i class="fas fa-save me-2"></i> Simpan Data
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card shadow-sm h-100 border-0">
+                    <div class="card-header bg-white py-3 fw-bold border-bottom d-flex justify-content-between">
+                        <span><i class="fas fa-code text-success me-2"></i> Panel Algoritma (Demonstrasi)</span>
+                        <span class="badge bg-light text-dark border">Logic Test</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded border h-100">
+                                    <label class="form-label fw-bold small text-primary">LINEAR SEARCH</label>
+                                    <p class="small text-muted mb-2">Cari apakah harga tertentu pernah terjadi.</p>
+                                    <form method="post" class="d-flex gap-2">
+                                        <input type="number" step="0.01" name="keyword" class="form-control form-control-sm" placeholder="Input harga...">
+                                        <button type="submit" name="btn_search" class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded border h-100">
+                                    <label class="form-label fw-bold small text-success">BUBBLE SORT</label>
+                                    <p class="small text-muted mb-2">Urutkan data table dari harga termurah.</p>
+                                    <form method="post">
+                                        <button type="submit" name="btn_sort" class="btn btn-outline-success btn-sm w-100 mt-1">
+                                            <i class="fas fa-sort-amount-down me-1"></i> Jalankan Sorting
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if msg %}
+                        <div class="alert alert-info mt-3 mb-0 border-0 shadow-sm">
+                            <i class="fas fa-check-circle me-2"></i> <strong>Hasil:</strong> {{ msg }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow border-0 overflow-hidden">
+            <div class="card-header bg-white py-3 fw-bold d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-table text-secondary me-2"></i> Data Historis Lengkap</span>
+                <span class="badge bg-primary rounded-pill px-3">50 Data Terakhir</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped mb-0 align-middle table-custom">
+                        <thead class="text-uppercase small">
+                            <tr>
+                                <th class="ps-4 py-3">Date</th>
+                                <th class="py-3">Price</th>
+                                <th class="py-3 text-muted">Open</th>
+                                <th class="py-3 text-success">High</th>
+                                <th class="py-3 text-danger">Low</th>
+                                <th class="py-3">Vol.</th>
+                                <th class="py-3">Change %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in data %}
+                            <tr>
+                                <td class="ps-4 fw-bold text-primary">{{ row.date }}</td>
+                                <td class="fw-bold fs-6">${{ row.price }}</td>
+                                <td class="text-muted">${{ row.open }}</td>
+                                <td class="text-success small">${{ row.high }}</td>
+                                <td class="text-danger small">${{ row.low }}</td>
+                                <td class="small">{{ row.vol }}</td>
+                                <td>
+                                    {% if '-' in row.change_percent|string %}
+                                        <span class="badge bg-danger bg-opacity-10 text-danger">{{ row.change_percent }}</span>
+                                    {% else %}
+                                        <span class="badge bg-success bg-opacity-10 text-success">{{ row.change_percent }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center py-5 text-muted">
+                                    <i class="fas fa-box-open fa-3x mb-3 d-block"></i>
+                                    Belum ada data di database.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="text-center text-muted mt-5 mb-4 small">
+            &copy; 2024 Gold Analyst System. Developed for Certification.
+        </footer>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
